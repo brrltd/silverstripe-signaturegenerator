@@ -1,0 +1,8 @@
+---
+Name: signatureroutes
+---
+SignatureController:
+  urlsegment: 'signature'
+Director:
+  rules:
+    'signature//$Action/$ID/$OtherID': 'SignatureController'

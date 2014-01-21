@@ -1,0 +1,32 @@
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+@import '_core.scss';
+@import '_mixins.scss';
+@import '_forms.scss';
+
+body {
+	min-width: 800px;
+}
+
+.Header {
+	background: rgb(230, 230, 230);
+	width: 100%;
+	
+	.Instructions {
+		width: 800px;
+		margin: 0 auto;
+		padding: 40px 0;
+		font-size: 1.5em;
+		
+	}
+}
+
+.Container {
+	width: 800px;
+	margin: 0 auto;
+	padding: 40px 0;
+}

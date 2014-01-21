@@ -1,0 +1,184 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+input.text,
+select {
+  border: 1px solid #c8c8c8;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: block;
+  height: 30px;
+  line-height: 22px;
+  padding: 3px 5px;
+  width: 400px;
+}
+input.text.placeholder,
+select.placeholder {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #a0a0a0;
+}
+input.text:-moz-placeholder,
+select:-moz-placeholder {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #a0a0a0;
+}
+input.text::-moz-placeholder,
+select::-moz-placeholder {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #a0a0a0;
+}
+input.text:-ms-input-placeholder,
+select:-ms-input-placeholder {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #a0a0a0;
+}
+input.text::-webkit-input-placeholder,
+select::-webkit-input-placeholder {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #a0a0a0;
+}
+
+input:focus.placeholder {
+  color: transparent;
+}
+input:focus:-moz-placeholder {
+  color: transparent;
+}
+input:focus::-moz-placeholder {
+  color: transparent;
+}
+input:focus:-ms-input-placeholder {
+  color: transparent;
+}
+input:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+
+input, button {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+}
+
+.Form fieldset {
+  border: 0;
+}
+.Form .field {
+  overflow: visible;
+  clear: both;
+  position: relative;
+}
+.Form .field.fieldgroup {
+  border: 1px solid gainsboro;
+  margin: 0 0 20px 0;
+}
+.Form .field.fieldgroup > label.left {
+  padding: 10px 20px;
+  background: #f0f0f0;
+}
+.Form .field.fieldgroup > .middleColumn {
+  padding: 20px;
+}
+.Form .field.fieldgroup .fieldholder-small {
+  *zoom: 1;
+  padding: 8px 0 0 0;
+}
+.Form .field.fieldgroup .fieldholder-small:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.Form .field.fieldgroup .fieldholder-small > label {
+  float: left;
+  width: 160px;
+  display: block;
+  line-height: 30px;
+}
+.Form .field.fieldgroup .fieldholder-small > input {
+  float: left;
+}
+.Form .field.fieldgroup .fieldholder-small > ul.optionset {
+  float: left;
+  width: 400px;
+  list-style: none;
+}
+.Form .field > label.left {
+  font-weight: bold;
+  font-size: 1.1em;
+  display: block;
+  padding: 0 0 5px 0;
+}
+.Form .field .middleColumn {
+  overflow: hidden;
+}
+.Form .field .middleColumn input.text.required, .Form .field .middleColumn input.text.holder-required,
+.Form .field .middleColumn textarea.required,
+.Form .field .middleColumn textarea.holder-required {
+  color: white;
+}
+.Form .field .middleColumn > label {
+  display: block;
+  float: left;
+}
+.Form .Actions {
+  padding: 30px 0;
+  text-align: right;
+}
+.Form .Actions input {
+  color: white;
+  font-weight: bold;
+  font-size: 1.4em;
+  background: #a0a0a0;
+  border: 0 none;
+  line-height: 20px;
+  padding: 10px 30px;
+  margin: 0 10px 0 0;
+  cursor: pointer;
+}
+.Form .Actions input:hover {
+  background: #787878;
+}
+.Form .Actions #ForgotPassword {
+  padding: 30px 0 0 0;
+}
+
+body {
+  min-width: 800px;
+}
+
+.Header {
+  background: #e6e6e6;
+  width: 100%;
+}
+.Header .Instructions {
+  width: 800px;
+  margin: 0 auto;
+  padding: 40px 0;
+  font-size: 1.5em;
+}
+
+.Container {
+  width: 800px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
