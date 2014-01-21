@@ -12,14 +12,6 @@ class SignatureController extends Controller {
 		return $this->renderWith('SignatureForm');
 	}
 	
-	protected function saveDetails($data) {
-		
-	}
-	
-	protected function loadDetails($form) {
-		
-	}
-	
 	/**
 	 * Gets a persistant signature record
 	 * 
@@ -60,7 +52,12 @@ class SignatureController extends Controller {
 				new EmailField('Email', 'Email *', null, 255)
 			)),
 			new FieldGroup('Options', array(
-				new OptionsetField('Format', 'Output Format *', array('HTML', 'Plain Text', 'Outlook Package'))
+				new OptionsetField('Format', 'Output Format *', array(
+					'html' => 'HTML',
+					'txt' => 'Plain Text',
+					'Outlook' => 'Outlook Package'
+				),
+				'html')
 			))
 		));
 		
@@ -82,23 +79,60 @@ class SignatureController extends Controller {
 		$signature->write();
 		return $signature;
 	}
+	
+	protected function generateFilename($name, $extension = null) {
+		$tokens = array_map(function($text) {
+			return ucfirst($text);
+		}, preg_split('/\W+/', trim($name)));
 		
-
+		$name = implode('_', $tokens);
+		if($extension) $name .= '.' . $extension;
+		return $name;
+	}
+	
+	public function generateTemplate($signature, $embed, $format = 'html') {
+		$template = $format === 'html' ? 'SignatureHTML' : 'SignaturePlain';
+		return $this
+			->customise($signature)
+			->customise(array('Embed' => $embed))
+			->renderWith($template);
+	}
+	
+	public function setContentType($format = 'html') {
+		if($format === 'html') {
+			$this->response->addHeader('Content-Type', 'text/html; charset=UTF-8');
+		} else {
+			$this->response->addHeader('Content-Type', 'text/plain; charset=UTF-8');
+		}
+	}
+	
+	public function setDownload($filename) {
+		$this->response->addHeader('Content-Disposition', 'attachment; filename=' . $filename);
+	}
+	
+	protected function getFormat($data) {
+		return in_array($data['Format'], array('html', 'txt'))
+			? $data['Format']
+			: 'html';
+	}
 
 	public function download($data, Form $form) {
 		$signature = $this->updateRecord($form);
+		$format = $this->getFormat($data);
+		$filename = $this->generateFilename($data['Name'], $format);
 		
-		
-		return $this
-			->customise($signature)
-			->renderWith('Signature');
+		// Specify download
+		$this->setDownload($filename);
+		$this->setContentType($format);
+		return $this->generateTemplate($signature, new LinkEmbed(), $format);
 	}
 	
 	public function preview($data, $form) {
 		$signature = $this->updateRecord($form);
+		$format = $this->getFormat($data);
 		
-		return $this
-			->customise($signature)
-			->renderWith('Signature');
+		// Present data
+		$this->setContentType($format);
+		return $this->generateTemplate($signature, new LinkEmbed(), $format);
 	}
 }
