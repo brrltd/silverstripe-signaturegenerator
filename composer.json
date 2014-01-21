@@ -1,0 +1,23 @@
+{
+	"name": "brrltd/silverstripe-signaturegenerator",
+	"description": "Basic html email signature generator for Silverstripe",
+	"type": "silverstripe-module",
+	"keywords": ["silverstripe", "signature", "email"],
+	"license": "BSD-3-Clause",
+	"authors": [
+		{
+			"name": "Damian Mooyman",
+			"email": "damian.mooyman@gmail.com"
+		}
+	],
+	"support": {
+		"issues": "http://github.com/brrltd/silverstripe-signaturegenerator/issues"
+	},
+	"require": {
+		"silverstripe/framework": ">=3.1",
+		"composer/installers": "*"
+	},
+	"extra": {
+		"installer-name": "signaturegenerator"
+	}
+}
