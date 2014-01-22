@@ -55,7 +55,7 @@ class SignatureController extends Controller {
 				new OptionsetField('Format', 'Output Format *', array(
 					'html' => 'HTML',
 					'txt' => 'Plain Text',
-					'Outlook' => 'Outlook Package'
+					'outlook' => 'Outlook Package'
 				),
 				'html')
 			))
@@ -73,6 +73,11 @@ class SignatureController extends Controller {
 		return $form;
 	}
 	
+	/**
+	 * 
+	 * @param Form $form
+	 * @return SignatureRecord
+	 */
 	protected function updateRecord(Form $form) {
 		$signature = $this->getSignatureRecord(true);
 		$form->saveInto($signature);
@@ -99,10 +104,16 @@ class SignatureController extends Controller {
 	}
 	
 	public function setContentType($format = 'html') {
-		if($format === 'html') {
-			$this->response->addHeader('Content-Type', 'text/html; charset=UTF-8');
-		} else {
-			$this->response->addHeader('Content-Type', 'text/plain; charset=UTF-8');
+		switch($format) {
+			case 'html':
+				$this->response->addHeader('Content-Type', 'text/html; charset=UTF-8');
+				break;
+			case 'txt':
+				$this->response->addHeader('Content-Type', 'text/plain; charset=UTF-8');
+				break;
+			case 'zip':
+				$this->response->addHeader('Content-Type', 'application/zip');
+				break;
 		}
 	}
 	
@@ -115,13 +126,65 @@ class SignatureController extends Controller {
 			? $data['Format']
 			: 'html';
 	}
+	
+	/**
+	 * Package a signature record into an outlook archive
+	 * 
+	 * @param SignatureRecord $signature
+	 * @return string Binary string representing output content
+	 */
+	protected function packageOutlook(SignatureRecord $signature) {
+		
+		// Determine filenames
+		$zipFilename = $this->generateFilename($signature->Name, 'zip');
+		$folderName = $this->generateFilename($signature->Name).'_files';
+		$htmlFilename = $this->generateFilename($signature->Name, 'htm');
+		$txtFilename = $this->generateFilename($signature->Name, 'txt');
+		
+		// Generate content
+		$embeddedImages = new VMLEmbed($folderName, $htmlFilename);
+		$htmlContent = $this->generateTemplate($signature, $embeddedImages, 'html');
+		$txtContent = $this->generateTemplate($signature, null, 'txt');
+		$filelistXMLContent = $embeddedImages->getFilelistXML();
+		
+		// Initialise archive file
+		$tempFile = tempnam(sys_get_temp_dir(), uniqid());
+		$zip = new ZipArchive();
+		if($zip->open($tempFile, ZipArchive::CREATE) !== true) {
+			throw new Exception("Could not create zip file at $tempFile");
+		}
+		
+		// Add template files
+		$zip->addFromString($htmlFilename, $htmlContent);
+		$zip->addFromString($txtFilename, $txtContent);
+		
+		// Add images
+		$zip->addFromString("$folderName/filelist.xml", $filelistXMLContent);
+		foreach($embeddedImages->getFiles() as $filename => $location) {
+			$filePath = realpath(BASE_PATH . '/' . $location);
+			$zip->addFile($filePath, "$folderName/$filename");
+		}
+		$zip->close();
+		
+		// Stream zip file content
+		$result = file_get_contents($tempFile);
+		unlink($tempFile);
+		$this->setDownload($zipFilename);
+		$this->setContentType('zip');
+		return $result;
+	}
 
 	public function download($data, Form $form) {
 		$signature = $this->updateRecord($form);
 		$format = $this->getFormat($data);
-		$filename = $this->generateFilename($data['Name'], $format);
+		
+		// Check if we should package an outlook signature
+		if($data['Format'] === 'outlook') {
+			return $this->packageOutlook($signature);
+		}
 		
 		// Specify download
+		$filename = $this->generateFilename($data['Name'], $format);
 		$this->setDownload($filename);
 		$this->setContentType($format);
 		return $this->generateTemplate($signature, new LinkEmbed(), $format);

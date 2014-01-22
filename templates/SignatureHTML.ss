@@ -1,4 +1,8 @@
-<html>
+<html $Embed.XMLNS>
+	<head>
+		<meta charset="utf-8" />
+		$Embed.Head
+	</head>
     <body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space; font-size: 10pt; font-family: Arial; color: black;">
 		&nbsp;<br />
 		<table border="0" cellpadding="0" cellspacing="0">
