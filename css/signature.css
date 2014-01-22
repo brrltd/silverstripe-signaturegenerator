@@ -165,6 +165,9 @@ input, button {
 body {
   min-width: 800px;
 }
+body * {
+  font-family: Arial, sans-serif;
+}
 
 .Header {
   background: #e6e6e6;
